@@ -1,0 +1,24 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories {
+   	 mavenLocal() 
+}
+
+repositories{
+    flatDir{
+        dirs 'C:\\Program Files\\Apache Software Foundation\\Tomcat 7.0\\lib'
+         
+    }
+}
+dependencies {
+        compile name: 'tomcat-dbcp' 
+        compile name: 'tomcat-jdbc'
+}
+
+jar {  
+    manifest {  
+        attributes 'Main-Class': 'com.tomcat.jdni.SHACryptor'  
+        
+    }  
+}  
