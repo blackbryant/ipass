@@ -1,0 +1,43 @@
+# coding=UTF-8
+__author__ = 'bryan'
+
+import pandas as pd
+import xlrd
+from pandas import DataFrame, Series
+
+filename='Book1.xlsx'
+xlsx = pd.ExcelFile(filename)
+sheet1 = xlsx.parse(0)
+sheet1_data =sheet1.groupby(['chipno']).sum()
+#print sheet1_data
+sheet1_data['sum'] =  sheet1_data[[0]].onSpidAmt + sheet1_data[[1]].offSpidAmt
+sheet1_data = sheet1_data.unstack()['sum']
+print sheet1_data
+
+
+#sheet2
+sheet2 = xlsx.parse(1)
+sheet2_data = sheet2.groupby(['chipno']).sum()
+sheet2_data = sheet2_data.unstack()['spidamt']
+print sheet2_data
+
+print "-------------------"
+shortData ={}
+longData={}
+if sheet2_data.count()>=sheet1_data.count():
+    shortData = sheet1_data
+    longData = sheet2_data
+else:
+    shortData = sheet2_data
+    longData  = sheet1_data
+
+for chipno  in shortData.index:
+    print chipno
+    if sheet1_data[chipno] == sheet2_data[chipno]:
+        print chipno+u","+str(shortData[chipno])+u",true"
+        del longData[chipno]
+    else:
+        print chipno+u","+str(shortData[chipno])+u",false"
+
+
+print longData
